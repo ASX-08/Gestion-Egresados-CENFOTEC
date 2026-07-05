@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Carreras</title>
+
+    <link rel="stylesheet" href="css/carreras.css">
+</head>
+
+<body>
+
+<header>
+
+    <h1>Sistema de Gestión de Egresados</h1>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+            <li><a href="gestion-egresados.html">Egresados</a></li>
+            <li><a href="login.html">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+</header>
+
+<main>
+
+    <div class="contenedor">
+
+        <h2>Registro de Carreras</h2>
+
+        <form onsubmit="return registrarCarrera()">
+
+            <label for="codigo">Código de la Carrera</label>
+            <input type="text" id="codigo" placeholder="Ingrese el código">
+
+            <label for="nombre">Nombre de la Carrera</label>
+            <input type="text" id="nombre" placeholder="Ingrese el nombre">
+
+            <label for="escuela">Escuela Académica</label>
+            <input type="text" id="escuela" placeholder="Ingrese la escuela">
+
+            <label for="grado">Grado Académico</label>
+            <select id="grado">
+                <option>Técnico</option>
+                <option>Bachillerato</option>
+                <option>Licenciatura</option>
+                <option>Maestría</option>
+            </select>
+
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" rows="5" placeholder="Descripción de la carrera"></textarea>
+
+            <button type="submit">Registrar Carrera</button>
+
+        </form>
+
+    </div>
+
+</main>
+
+<footer>
+
+    <p>&copy; 2026 Universidad CENFOTEC</p>
+
+</footer>
+
+<script src="js/carreras.js"></script>
+
+</body>
+
+</html>

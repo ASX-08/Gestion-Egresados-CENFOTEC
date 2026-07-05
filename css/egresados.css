@@ -1,0 +1,93 @@
+/* RESET */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#F4F6F9;
+    color:#333;
+}
+
+/* HEADER */
+
+header{
+    background:#003A70;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+nav ul{
+    list-style:none;
+    margin-top:10px;
+}
+
+nav ul li{
+    display:inline;
+    margin:0 15px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* FORMULARIO */
+
+.contenedor{
+    width:60%;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.contenedor h2{
+    text-align:center;
+    color:#003A70;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+button{
+    width:100%;
+    margin-top:25px;
+    padding:12px;
+    background:#0072CE;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#003A70;
+}
+
+/* FOOTER */
+
+footer{
+    background:#003A70;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}

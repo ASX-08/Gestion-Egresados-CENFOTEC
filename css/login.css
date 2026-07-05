@@ -1,0 +1,114 @@
+/* RESET */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #F4F6F9;
+}
+
+/* HEADER */
+
+header{
+    background-color: #003A70;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+nav ul{
+    list-style: none;
+}
+
+nav a{
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* CONTENEDOR LOGIN */
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+}
+
+.login-container{
+    background: white;
+    width: 400px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,.2);
+}
+
+.login-container h2{
+    text-align: center;
+    margin-bottom: 25px;
+    color: #003A70;
+}
+
+label{
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+input{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button{
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    background-color: #0072CE;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: #003A70;
+}
+
+/* FOOTER */
+
+footer{
+    background-color: #003A70;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+.logo-login{
+    display: block;
+    width: 90px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.bienvenida{
+    text-align: center;
+    margin-bottom: 25px;
+    color: #666;
+}
+
+.olvide{
+    text-align: center;
+    margin-top: 20px;
+    color: #0072CE;
+    cursor: pointer;
+}
+
+.olvide:hover{
+    text-decoration: underline;
+}

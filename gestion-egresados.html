@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Egresados</title>
+
+    <link rel="stylesheet" href="css/egresados.css">
+</head>
+
+<body>
+
+<header>
+
+    <h1>Sistema de Gestión de Egresados</h1>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="perfil.html">Perfil</a></li>
+            <li><a href="gestion-carreras.html">Carreras</a></li>
+        </ul>
+    </nav>
+
+</header>
+
+<main>
+
+    <div class="contenedor">
+
+        <h2>Registro de Egresados</h2>
+
+       <form onsubmit="return registrarEgresado()">
+
+            <label for="identificacion">Identificación</label>
+            <input type="text" id="identificacion">
+
+            <label for="nombre">Nombre Completo</label>
+            <input type="text" id="nombre">
+
+            <label for="correo">Correo Electrónico</label>
+            <input type="email" id="correo">
+
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono">
+
+            <label for="fecha">Fecha de Registro</label>
+            <input type="date" id="fecha">
+
+           <label for="trabajo">Lugar de Trabajo (Opcional)</label>
+           <input type="text" id="trabajo" placeholder="Ingrese el lugar de trabajo (opcional)">
+
+         <button type="submit">Registrar Egresado</button>
+
+        </form>
+
+    </div>
+
+</main>
+
+<footer>
+
+    <p>&copy; 2026 Universidad CENFOTEC</p>
+
+</footer>
+
+<script src="js/egresados.js"></script>
+
+</body>
+
+</html>
