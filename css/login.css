@@ -66,6 +66,12 @@ input{
     border-radius: 6px;
 }
 
+input:focus{
+    outline: none;
+    border: 2px solid #0072CE;
+    box-shadow: 0 0 5px rgba(0,114,206,0.3);
+}
+
 button{
     width: 100%;
     margin-top: 25px;
@@ -75,10 +81,12 @@ button{
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover{
     background-color: #003A70;
+    transform: scale(1.02);
 }
 
 /* FOOTER */
