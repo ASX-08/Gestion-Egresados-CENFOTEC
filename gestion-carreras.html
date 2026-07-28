@@ -28,43 +28,83 @@
 
 <main>
 
-    <div class="contenedor">
+<section class="contenedor">
 
-        <h2>Registro de Carreras</h2>
+<article>
 
-        <form onsubmit="return registrarCarrera()">
+<h2>Registro de Carreras</h2>
 
-            <label for="codigo">Código de la Carrera</label>
-            <input type="text" id="codigo" placeholder="Ingrese el código">
+<div id="mensaje"></div>
 
-            <label for="nombre">Nombre de la Carrera</label>
-            <input type="text" id="nombre" placeholder="Ingrese el nombre">
+<form id="formCarrera">
 
-            <label for="escuela">Escuela Académica</label>
-            <input type="text" id="escuela" placeholder="Ingrese la escuela">
+<label for="codigo">Código de la Carrera</label>
+<input type="text" id="codigo">
 
-            <label for="grado">Grado Académico</label>
-            <select id="grado">
-                <option>Técnico</option>
-                <option>Bachillerato</option>
-                <option>Licenciatura</option>
-                <option>Maestría</option>
-            </select>
+<label for="nombre">Nombre de la Carrera</label>
+<input type="text" id="nombre">
 
-            <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" rows="5" placeholder="Descripción de la carrera"></textarea>
+<label for="escuela">Escuela Académica</label>
+<input type="text" id="escuela">
 
-            <button type="submit">Registrar Carrera</button>
+<label for="grado">Grado Académico</label>
 
-        </form>
+<select id="grado">
+    <option value="">Seleccione...</option>
+    <option>Técnico</option>
+    <option>Bachillerato</option>
+    <option>Licenciatura</option>
+    <option>Maestría</option>
+</select>
 
-    </div>
+<label for="descripcion">Descripción</label>
+
+<textarea id="descripcion" rows="5"></textarea>
+
+<br><br>
+
+<button type="submit">
+    Guardar Carrera
+</button>
+
+</form>
+
+<hr>
+
+<h2>Lista de Carreras</h2>
+
+<table id="tablaCarreras">
+
+<thead>
+
+<tr>
+
+<th>Código</th>
+<th>Nombre</th>
+<th>Escuela</th>
+<th>Grado</th>
+<th>Descripción</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="listaCarreras">
+
+</tbody>
+
+</table>
+
+</article>
+
+</section>
 
 </main>
 
 <footer>
 
-    <p>&copy; 2026 Universidad CENFOTEC</p>
+<p>&copy; 2026 Universidad CENFOTEC</p>
 
 </footer>
 
