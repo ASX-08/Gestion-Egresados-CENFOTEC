@@ -97,3 +97,81 @@ footer{
     padding: 20px;
     margin-top: 40px;
 }
+
+/* MENSAJES */
+
+#mensaje{
+    margin-bottom:20px;
+    padding:10px;
+    border-radius:6px;
+    text-align:center;
+    font-weight:bold;
+    display:none;
+}
+
+.error{
+    background:#f8d7da;
+    color:#721c24;
+    display:block;
+}
+
+.exito{
+    background:#d4edda;
+    color:#155724;
+    display:block;
+}
+
+/* TABLA */
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#003A70;
+    color:white;
+    padding:10px;
+}
+
+table td{
+    padding:10px;
+    text-align:center;
+    border:1px solid #cccccc;
+}
+
+table tr:nth-child(even){
+    background:#f2f2f2;
+}
+
+/* BOTONES DE ACCIONES */
+
+.editar{
+    background:#f0ad4e;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+    width:auto;
+    margin-right:5px;
+}
+
+.eliminar{
+    background:#d9534f;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+    width:auto;
+}
+
+.editar:hover{
+    background:#ec971f;
+}
+
+.eliminar:hover{
+    background:#c9302c;
+}
