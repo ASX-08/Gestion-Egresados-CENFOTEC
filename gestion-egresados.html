@@ -27,41 +27,79 @@
 
 <main>
 
-    <div class="contenedor">
+<section class="contenedor">
 
-        <h2>Registro de Egresados</h2>
+<article>
 
-       <form onsubmit="return registrarEgresado()">
+<h2>Registro de Egresados</h2>
 
-            <label for="identificacion">Identificación</label>
-            <input type="text" id="identificacion">
+<div id="mensaje"></div>
 
-            <label for="nombre">Nombre Completo</label>
-            <input type="text" id="nombre">
+<form id="formEgresado">
 
-            <label for="correo">Correo Electrónico</label>
-            <input type="email" id="correo">
+<label for="identificacion">Identificación</label>
+<input type="text" id="identificacion">
 
-            <label for="telefono">Teléfono</label>
-            <input type="tel" id="telefono">
+<label for="nombre">Nombre Completo</label>
+<input type="text" id="nombre">
 
-            <label for="fecha">Fecha de Registro</label>
-            <input type="date" id="fecha">
+<label for="correo">Correo Electrónico</label>
+<input type="email" id="correo">
 
-           <label for="trabajo">Lugar de Trabajo (Opcional)</label>
-           <input type="text" id="trabajo" placeholder="Ingrese el lugar de trabajo (opcional)">
+<label for="telefono">Teléfono</label>
+<input type="tel" id="telefono">
 
-         <button type="submit">Registrar Egresado</button>
+<label for="fecha">Fecha de Registro</label>
+<input type="date" id="fecha">
 
-        </form>
+<label for="trabajo">Lugar de Trabajo (Opcional)</label>
+<input type="text" id="trabajo">
 
-    </div>
+<br><br>
+
+<button type="submit" id="btnGuardar">
+    Guardar Egresado
+</button>
+
+</form>
+
+<hr>
+
+<h2>Lista de Egresados</h2>
+
+<table id="tablaEgresados">
+
+<thead>
+
+<tr>
+
+<th>Identificación</th>
+<th>Nombre</th>
+<th>Correo</th>
+<th>Teléfono</th>
+<th>Fecha</th>
+<th>Trabajo</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="listaEgresados">
+
+</tbody>
+
+</table>
+
+</article>
+
+</section>
 
 </main>
 
 <footer>
 
-    <p>&copy; 2026 Universidad CENFOTEC</p>
+<p>&copy; 2026 Universidad CENFOTEC</p>
 
 </footer>
 
