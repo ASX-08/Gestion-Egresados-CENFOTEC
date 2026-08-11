@@ -1,10 +1,12 @@
+
 let formulario = document.querySelector("#formEgresado");
 let mensaje = document.querySelector("#mensaje");
 let lista = document.querySelector("#listaEgresados");
 
-let indiceEditar = -1;
+// ==========================================
+// FECHA ACTUAL
+// ==========================================
 
-// Fecha actual
 let hoy = new Date();
 
 let año = hoy.getFullYear();
@@ -15,17 +17,34 @@ let fechaActual = año + "-" + mes + "-" + dia;
 
 document.getElementById("fecha").value = fechaActual;
 
-// Cargar tabla al abrir la página
+
+// ==========================================
+// CARGAR EGRESADOS AL ABRIR LA PÁGINA
+// ==========================================
+
 mostrarEgresados();
+
+
+// ==========================================
+// EVENTO DEL FORMULARIO
+// ==========================================
 
 formulario.addEventListener("submit", guardarEgresado);
 
-function guardarEgresado(event){
+
+// ==========================================
+// GUARDAR EGRESADO - POST
+// ==========================================
+
+async function guardarEgresado(event) {
 
     event.preventDefault();
 
     mensaje.className = "";
     mensaje.textContent = "";
+
+
+    // Obtener datos del formulario
 
     let identificacion = document.getElementById("identificacion").value.trim();
     let nombre = document.getElementById("nombre").value.trim();
@@ -34,148 +53,295 @@ function guardarEgresado(event){
     let fecha = document.getElementById("fecha").value;
     let trabajo = document.getElementById("trabajo").value.trim();
 
-    console.log("Identificación:", identificacion);
-    console.log("Nombre:", nombre);
-    console.log("Correo:", correo);
-    console.log("Teléfono:", telefono);
-    console.log("Fecha:", fecha);
-    console.log("Trabajo:", trabajo);
 
-    if(
-        identificacion==="" ||
-        nombre==="" ||
-        correo==="" ||
-        telefono==="" ||
-        fecha===""){
+    // ==========================================
+    // VALIDAR CAMPOS OBLIGATORIOS
+    // ==========================================
 
-        mensaje.className="error";
-        mensaje.textContent="Debe rellenar todos los campos obligatorios.";
+    if (
+        identificacion === "" ||
+        nombre === "" ||
+        correo === "" ||
+        telefono === "" ||
+        fecha === ""
+    ) {
+
+        mensaje.className = "error";
+
+        mensaje.textContent =
+            "Debe rellenar todos los campos obligatorios.";
+
         return;
     }
 
-    let regexCedula=/^[1-7]\d{8}$/;
-    let regexCorreo=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let regexTelefono=/^\d{8}$/;
 
-    if(!regexCedula.test(identificacion)){
-        mensaje.className="error";
-        mensaje.textContent="La cédula no es válida.";
+    // ==========================================
+    // VALIDAR CÉDULA DE COSTA RICA
+    // ==========================================
+
+    let regexCedula = /^[1-7]\d{8}$/;
+
+    if (!regexCedula.test(identificacion)) {
+
+        mensaje.className = "error";
+
+        mensaje.textContent =
+            "La cédula no es válida.";
+
         return;
     }
 
-    if(!regexCorreo.test(correo)){
-        mensaje.className="error";
-        mensaje.textContent="Correo electrónico inválido.";
+
+    // ==========================================
+    // VALIDAR CORREO
+    // ==========================================
+
+    let regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regexCorreo.test(correo)) {
+
+        mensaje.className = "error";
+
+        mensaje.textContent =
+            "Correo electrónico inválido.";
+
         return;
     }
 
-    if(!regexTelefono.test(telefono)){
-        mensaje.className="error";
-        mensaje.textContent="El teléfono debe tener 8 dígitos.";
+
+    // ==========================================
+    // VALIDAR TELÉFONO
+    // ==========================================
+
+    let regexTelefono = /^\d{8}$/;
+
+    if (!regexTelefono.test(telefono)) {
+
+        mensaje.className = "error";
+
+        mensaje.textContent =
+            "El teléfono debe tener 8 dígitos.";
+
         return;
     }
+
+
+    // ==========================================
+    // CREAR OBJETO PARA EL BACKEND
+    // ==========================================
 
     let egresado = {
-        identificacion,
-        nombre,
-        correo,
-        telefono,
-        fecha,
-        trabajo
+
+        identificacion: identificacion,
+
+        nombreCompleto: nombre,
+
+        correoElectronico: correo,
+
+        telefono: telefono,
+
+        fechaRegistro: fecha
+
     };
 
-    let egresados = JSON.parse(localStorage.getItem("egresados")) || [];
 
-    if(indiceEditar==-1){
-        egresados.push(egresado);
-    }else{
-        egresados[indiceEditar]=egresado;
-        indiceEditar=-1;
+    // ==========================================
+    // LUGAR DE TRABAJO
+    // ES OPCIONAL
+    // ==========================================
+
+    if (trabajo !== "") {
+
+        egresado.lugaresTrabajo = [trabajo];
+
     }
 
-    localStorage.setItem("egresados",JSON.stringify(egresados));
 
-    mensaje.className="exito";
-    mensaje.textContent="Registro guardado correctamente.";
+    // ==========================================
+    // ENVIAR DATOS AL BACKEND
+    // ==========================================
 
-    formulario.reset();
+    try {
 
-    document.getElementById("fecha").value=fechaActual;
+        let respuesta = await fetch(
+            "http://localhost:3000/egresados",
+            {
 
-    mostrarEgresados();
-}
+                method: "POST",
 
-function mostrarEgresados() {
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-    let egresados = JSON.parse(localStorage.getItem("egresados")) || [];
+                body: JSON.stringify(egresado)
 
-    lista.innerHTML = "";
+            }
+        );
 
-    for (let i = 0; i < egresados.length; i++) {
 
-        lista.innerHTML += `
-        <tr>
+        let datos = await respuesta.json();
 
-            <td>${egresados[i].identificacion}</td>
-            <td>${egresados[i].nombre}</td>
-            <td>${egresados[i].correo}</td>
-            <td>${egresados[i].telefono}</td>
-            <td>${egresados[i].fecha}</td>
-            <td>${egresados[i].trabajo}</td>
 
-            <td>
+        // ==========================================
+        // COMPROBAR RESPUESTA DEL SERVIDOR
+        // ==========================================
 
-                <button class="editar" onclick="editarEgresado(${i})">
-                    Editar
-                </button>
+        if (!respuesta.ok) {
 
-                <button class="eliminar" onclick="eliminarEgresado(${i})">
-                    Eliminar
-                </button>
+            throw new Error(
+                datos.mensajeError ||
+                datos.error ||
+                "No se pudo registrar el egresado."
+            );
 
-            </td>
+        }
 
-        </tr>
-        `;
-    }
 
-}
-
-function eliminarEgresado(indice) {
-
-    let egresados = JSON.parse(localStorage.getItem("egresados")) || [];
-
-    if (confirm("¿Desea eliminar este egresado?")) {
-
-        egresados.splice(indice, 1);
-
-        localStorage.setItem("egresados", JSON.stringify(egresados));
-
-        mostrarEgresados();
+        // ==========================================
+        // MENSAJE DE ÉXITO
+        // ==========================================
 
         mensaje.className = "exito";
-        mensaje.textContent = "Egresado eliminado correctamente.";
+
+        mensaje.textContent =
+            "Egresado registrado correctamente.";
+
+
+        // Limpiar formulario
+
+        formulario.reset();
+
+
+        // Volver a colocar la fecha actual
+
+        document.getElementById("fecha").value = fechaActual;
+
+
+        // Actualizar la tabla
+
+        await mostrarEgresados();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al registrar egresado:",
+            error
+        );
+
+        mensaje.className = "error";
+
+        mensaje.textContent =
+            "No se pudo registrar el egresado: " +
+            error.message;
 
     }
 
 }
 
-function editarEgresado(indice) {
 
-    let egresados = JSON.parse(localStorage.getItem("egresados")) || [];
+// ==========================================
+// MOSTRAR EGRESADOS - GET
+// ==========================================
 
-    let egresado = egresados[indice];
+async function mostrarEgresados() {
 
-    document.getElementById("identificacion").value = egresado.identificacion;
-    document.getElementById("nombre").value = egresado.nombre;
-    document.getElementById("correo").value = egresado.correo;
-    document.getElementById("telefono").value = egresado.telefono;
-    document.getElementById("fecha").value = egresado.fecha;
-    document.getElementById("trabajo").value = egresado.trabajo;
+    try {
 
-    indiceEditar = indice;
+        let respuesta = await fetch(
+            "http://localhost:3000/egresados"
+        );
 
-    mensaje.className = "exito";
-    mensaje.textContent = "Modifique los datos y presione Guardar Egresado.";
+
+        // Comprobar respuesta
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron consultar los egresados."
+            );
+
+        }
+
+
+        // Convertir respuesta a JSON
+
+        let egresados = await respuesta.json();
+
+
+        // Limpiar tabla
+
+        lista.innerHTML = "";
+
+
+        // ==========================================
+        // MOSTRAR CADA EGRESADO
+        // ==========================================
+
+        for (let i = 0; i < egresados.length; i++) {
+
+            let egresado = egresados[i];
+
+
+            let lugaresTrabajo = "";
+
+            if (Array.isArray(egresado.lugaresTrabajo)) {
+
+                lugaresTrabajo =
+                    egresado.lugaresTrabajo.join(", ");
+
+            } else if (egresado.lugaresTrabajo) {
+
+                lugaresTrabajo =
+                    egresado.lugaresTrabajo;
+
+            }
+
+
+            lista.innerHTML += `
+
+                <tr>
+
+                    <td>${egresado.identificacion || ""}</td>
+
+                    <td>${egresado.nombreCompleto || ""}</td>
+
+                    <td>${egresado.correoElectronico || ""}</td>
+
+                    <td>${egresado.telefono || ""}</td>
+
+                    <td>${egresado.fechaRegistro || ""}</td>
+
+                    <td>${lugaresTrabajo}</td>
+
+                </tr>
+
+            `;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al consultar egresados:",
+            error
+        );
+
+
+        lista.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+                    No se pudieron cargar los egresados.
+                </td>
+
+            </tr>
+
+        `;
+
+    }
 
 }
+
