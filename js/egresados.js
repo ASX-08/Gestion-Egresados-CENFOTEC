@@ -1,7 +1,9 @@
-
 let formulario = document.querySelector("#formEgresado");
 let mensaje = document.querySelector("#mensaje");
 let lista = document.querySelector("#listaEgresados");
+
+let editando = false;
+let identificacionOriginal = "";
 
 // ==========================================
 // FECHA ACTUAL
@@ -17,13 +19,11 @@ let fechaActual = año + "-" + mes + "-" + dia;
 
 document.getElementById("fecha").value = fechaActual;
 
-
 // ==========================================
 // CARGAR EGRESADOS AL ABRIR LA PÁGINA
 // ==========================================
 
 mostrarEgresados();
-
 
 // ==========================================
 // EVENTO DEL FORMULARIO
@@ -31,9 +31,8 @@ mostrarEgresados();
 
 formulario.addEventListener("submit", guardarEgresado);
 
-
 // ==========================================
-// GUARDAR EGRESADO - POST
+// GUARDAR / EDITAR EGRESADO
 // ==========================================
 
 async function guardarEgresado(event) {
@@ -43,15 +42,25 @@ async function guardarEgresado(event) {
     mensaje.className = "";
     mensaje.textContent = "";
 
+    // Obtener datos
 
-    // Obtener datos del formulario
+    let identificacion =
+        document.getElementById("identificacion").value.trim();
 
-    let identificacion = document.getElementById("identificacion").value.trim();
-    let nombre = document.getElementById("nombre").value.trim();
-    let correo = document.getElementById("correo").value.trim();
-    let telefono = document.getElementById("telefono").value.trim();
-    let fecha = document.getElementById("fecha").value;
-    let trabajo = document.getElementById("trabajo").value.trim();
+    let nombre =
+        document.getElementById("nombre").value.trim();
+
+    let correo =
+        document.getElementById("correo").value.trim();
+
+    let telefono =
+        document.getElementById("telefono").value.trim();
+
+    let fecha =
+        document.getElementById("fecha").value;
+
+    let trabajo =
+        document.getElementById("trabajo").value.trim();
 
 
     // ==========================================
@@ -76,7 +85,7 @@ async function guardarEgresado(event) {
 
 
     // ==========================================
-    // VALIDAR CÉDULA DE COSTA RICA
+    // VALIDAR CÉDULA
     // ==========================================
 
     let regexCedula = /^[1-7]\d{8}$/;
@@ -96,7 +105,8 @@ async function guardarEgresado(event) {
     // VALIDAR CORREO
     // ==========================================
 
-    let regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let regexCorreo =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!regexCorreo.test(correo)) {
 
@@ -127,6 +137,70 @@ async function guardarEgresado(event) {
 
 
     // ==========================================
+    // SI ESTAMOS EDITANDO
+    // ==========================================
+
+    if (editando) {
+
+        let egresadosLocal =
+            JSON.parse(
+                localStorage.getItem("egresados") || "[]"
+            );
+
+        let posicion = egresadosLocal.findIndex(
+            function (egresado) {
+                return egresado.identificacion === identificacionOriginal;
+            }
+        );
+
+        if (posicion !== -1) {
+
+            egresadosLocal[posicion] = {
+
+                identificacion: identificacion,
+
+                nombreCompleto: nombre,
+
+                correoElectronico: correo,
+
+                telefono: telefono,
+
+                fechaRegistro: fecha,
+
+                lugaresTrabajo:
+                    trabajo !== "" ? [trabajo] : []
+
+            };
+
+            localStorage.setItem(
+                "egresados",
+                JSON.stringify(egresadosLocal)
+            );
+        }
+
+        mensaje.className = "exito";
+
+        mensaje.textContent =
+            "Egresado actualizado correctamente.";
+
+        editando = false;
+        identificacionOriginal = "";
+
+        formulario.reset();
+
+        document.getElementById("fecha").value =
+            fechaActual;
+
+        document.getElementById("btnGuardar").textContent =
+            "Guardar Egresado";
+
+        await mostrarEgresados();
+
+        return;
+    }
+
+
+    // ==========================================
     // CREAR OBJETO PARA EL BACKEND
     // ==========================================
 
@@ -147,7 +221,6 @@ async function guardarEgresado(event) {
 
     // ==========================================
     // LUGAR DE TRABAJO
-    // ES OPCIONAL
     // ==========================================
 
     if (trabajo !== "") {
@@ -158,7 +231,7 @@ async function guardarEgresado(event) {
 
 
     // ==========================================
-    // ENVIAR DATOS AL BACKEND
+    // ENVIAR POST AL BACKEND
     // ==========================================
 
     try {
@@ -183,7 +256,7 @@ async function guardarEgresado(event) {
 
 
         // ==========================================
-        // COMPROBAR RESPUESTA DEL SERVIDOR
+        // COMPROBAR RESPUESTA
         // ==========================================
 
         if (!respuesta.ok) {
@@ -195,6 +268,23 @@ async function guardarEgresado(event) {
             );
 
         }
+
+
+        // ==========================================
+        // GUARDAR TAMBIÉN EN LOCALSTORAGE
+        // ==========================================
+
+        let egresadosLocal =
+            JSON.parse(
+                localStorage.getItem("egresados") || "[]"
+            );
+
+        egresadosLocal.push(datos);
+
+        localStorage.setItem(
+            "egresados",
+            JSON.stringify(egresadosLocal)
+        );
 
 
         // ==========================================
@@ -212,12 +302,13 @@ async function guardarEgresado(event) {
         formulario.reset();
 
 
-        // Volver a colocar la fecha actual
+        // Colocar fecha nuevamente
 
-        document.getElementById("fecha").value = fechaActual;
+        document.getElementById("fecha").value =
+            fechaActual;
 
 
-        // Actualizar la tabla
+        // Actualizar tabla
 
         await mostrarEgresados();
 
@@ -236,7 +327,6 @@ async function guardarEgresado(event) {
             error.message;
 
     }
-
 }
 
 
@@ -253,8 +343,6 @@ async function mostrarEgresados() {
         );
 
 
-        // Comprobar respuesta
-
         if (!respuesta.ok) {
 
             throw new Error(
@@ -264,12 +352,8 @@ async function mostrarEgresados() {
         }
 
 
-        // Convertir respuesta a JSON
-
         let egresados = await respuesta.json();
 
-
-        // Limpiar tabla
 
         lista.innerHTML = "";
 
@@ -282,15 +366,20 @@ async function mostrarEgresados() {
 
             let egresado = egresados[i];
 
-
             let lugaresTrabajo = "";
 
-            if (Array.isArray(egresado.lugaresTrabajo)) {
+            if (
+                Array.isArray(
+                    egresado.lugaresTrabajo
+                )
+            ) {
 
                 lugaresTrabajo =
                     egresado.lugaresTrabajo.join(", ");
 
-            } else if (egresado.lugaresTrabajo) {
+            } else if (
+                egresado.lugaresTrabajo
+            ) {
 
                 lugaresTrabajo =
                     egresado.lugaresTrabajo;
@@ -302,17 +391,45 @@ async function mostrarEgresados() {
 
                 <tr>
 
-                    <td>${egresado.identificacion || ""}</td>
+                    <td>
+                        ${egresado.identificacion || ""}
+                    </td>
 
-                    <td>${egresado.nombreCompleto || ""}</td>
+                    <td>
+                        ${egresado.nombreCompleto || ""}
+                    </td>
 
-                    <td>${egresado.correoElectronico || ""}</td>
+                    <td>
+                        ${egresado.correoElectronico || ""}
+                    </td>
 
-                    <td>${egresado.telefono || ""}</td>
+                    <td>
+                        ${egresado.telefono || ""}
+                    </td>
 
-                    <td>${egresado.fechaRegistro || ""}</td>
+                    <td>
+                        ${egresado.fechaRegistro || ""}
+                    </td>
 
-                    <td>${lugaresTrabajo}</td>
+                    <td>
+                        ${lugaresTrabajo}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="editar"
+                            onclick="editarEgresado('${egresado.identificacion}')">
+                            Editar
+                        </button>
+
+                        <button
+                            class="eliminar"
+                            onclick="eliminarEgresado('${egresado.identificacion}')">
+                            Eliminar
+                        </button>
+
+                    </td>
 
                 </tr>
 
@@ -333,7 +450,7 @@ async function mostrarEgresados() {
 
             <tr>
 
-                <td colspan="6">
+                <td colspan="7">
                     No se pudieron cargar los egresados.
                 </td>
 
@@ -342,6 +459,145 @@ async function mostrarEgresados() {
         `;
 
     }
+}
+
+
+// ==========================================
+// EDITAR EGRESADO
+// ==========================================
+
+function editarEgresado(identificacion) {
+
+    let egresadosLocal =
+        JSON.parse(
+            localStorage.getItem("egresados") || "[]"
+        );
+
+
+    let egresado =
+        egresadosLocal.find(
+            function (item) {
+                return item.identificacion === identificacion;
+            }
+        );
+
+
+    if (!egresado) {
+
+        mensaje.className = "error";
+
+        mensaje.textContent =
+            "No se encontró el egresado en LocalStorage.";
+
+        return;
+    }
+
+
+    // ==========================================
+    // CARGAR DATOS EN EL FORMULARIO
+    // ==========================================
+
+    document.getElementById("identificacion").value =
+        egresado.identificacion || "";
+
+    document.getElementById("nombre").value =
+        egresado.nombreCompleto || "";
+
+    document.getElementById("correo").value =
+        egresado.correoElectronico || "";
+
+    document.getElementById("telefono").value =
+        egresado.telefono || "";
+
+    document.getElementById("fecha").value =
+        egresado.fechaRegistro || fechaActual;
+
+
+    if (
+        Array.isArray(
+            egresado.lugaresTrabajo
+        )
+    ) {
+
+        document.getElementById("trabajo").value =
+            egresado.lugaresTrabajo.join(", ");
+
+    } else {
+
+        document.getElementById("trabajo").value =
+            egresado.lugaresTrabajo || "";
+
+    }
+
+
+    editando = true;
+
+    identificacionOriginal =
+        identificacion;
+
+
+    document.getElementById("btnGuardar").textContent =
+        "Actualizar Egresado";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 }
+
+
+// ==========================================
+// ELIMINAR EGRESADO
+// ==========================================
+
+function eliminarEgresado(identificacion) {
+
+    let confirmar =
+        confirm(
+            "¿Está seguro de eliminar este egresado?"
+        );
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    let egresadosLocal =
+        JSON.parse(
+            localStorage.getItem("egresados") || "[]"
+        );
+
+
+    egresadosLocal =
+        egresadosLocal.filter(
+            function (egresado) {
+
+                return egresado.identificacion !==
+                    identificacion;
+
+            }
+        );
+
+
+    localStorage.setItem(
+        "egresados",
+        JSON.stringify(egresadosLocal)
+    );
+
+
+    mensaje.className = "exito";
+
+    mensaje.textContent =
+        "Egresado eliminado correctamente.";
+
+
+    mostrarEgresados();
+
+}
+
 

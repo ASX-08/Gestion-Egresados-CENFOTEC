@@ -103,13 +103,13 @@ footer{
     display:none;
 }
 
-.error{
+#mensaje.error{
     background:#f8d7da;
     color:#721c24;
     display:block;
 }
 
-.exito{
+#mensaje.exito{
     background:#d4edda;
     color:#155724;
     display:block;
